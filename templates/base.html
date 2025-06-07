@@ -1,0 +1,276 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Find products that are not listed anywhere, from mud pots to fancy T-shirts. Hunt the best!!{% block description %}{% endblock description %}">
+    <meta name="robots" content="assanj,cheap clothes, best clothes, best stalls in nagpur, best stalls near me, best stalls in my city, best street shops, best street food, hand made products, cheap products {% block keywords %}{% endblock keywords %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/menu_pics/favicon-32x32.png' %}" />
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Bodoni+Moda+SC:wght@400;700&family=Anton&family=Kings&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link   rel="stylesheet"   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <!-- Owl Carousel CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"/>
+    <!-- jQuery (required by Owl Carousel) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Owl Carousel JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="icon" href="{% static 'images/logo.jpeg' %}" type="image/png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src='{% static 'js/all.js' %}'></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/admin_custom.css' %}">
+
+    <title>{% block title %}AFC{% endblock title %}</title>
+</head>
+<body>
+    <nav class="custom-navbar-{% block body-class %}{% endblock body-class %} navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+                {% comment %} <img src="{% static 'images/logo.jpeg' %}" alt="Logo" class="me-2">  {% endcomment %}
+                <a href='/'>
+                        <div class="afc-brand">
+                        AFC
+                    </div>
+                </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/" onclick="closeNavbar()">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url "view_cart" %}" onclick="closeNavbar()">Your Cart</a>
+                    </li>
+                    {% if user.id == 1 %}
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url "order_list" %}" onclick="closeNavbar()">Orders</a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url "my_orders" %}" onclick="closeNavbar()">My Orders</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                          <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-primary btn-sm px-4 py-2 rounded-pill">Logout</button>
+                        </form>
+                    {% else %}
+                    <li class="nav-item">
+                        <div class="nav-link"><a class="btn btn-outline-light btn-sm px-4 py-2 rounded-pill" href="{% url 'login' %}" onclick="closeNavbar()">Login</a></div>
+                    </li>
+                    {% endif %}
+                    {% block search %}
+                    
+                    {% endblock search %}
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% block navbar %}{% endblock %}
+
+<!-- Main Content -->
+<div class="container mt-3 pt-4">
+
+    {% block content %}
+    {% endblock content %}
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section about">
+                <h5>About Us</h5>
+                <p>Discover unique products that showcase craftsmanship over brand labels. We bring you hand-crafted goods made with love and dedication.</p>
+            </div>
+
+            <div class="footer-section links">
+                <h5>Quick Links</h5>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    {% comment %} <li>
+                        <a  href="{% url "subscribe" %}" onclick="closeNavbar()">Subscriptions</a>
+                    </li>
+                    <li >
+                        <a  href="{% url "contact_us" %}" onclick="closeNavbar()">Partner</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'profile' user.username %}">Profile</a></li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %} {% endcomment %}
+                </ul>
+            </div>
+
+            <div class="footer-section social">
+                <h5>Follow Us</h5>
+                <div class="social-icons">
+                    <a href="#"><i class="bx bxl-facebook"></i></a>
+                    <a href="#"><i class="bx bxl-twitter"></i></a>
+                    <a href="#"><i class="bx bxl-instagram"></i></a>
+                    <a href="#"><i class="bx bxl-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+
+        {% comment %} <div class="footer-bottom">
+            <a href="{% url 'terms_and_conditions' %}">Terms & Conditions</a>
+            <a href="{% url 'privacy_policy' %}">Privacy Policy</a>
+            <a href="{% url 'refund_cancellation_policy' %}">Refund Policy</a>
+        </div> {% endcomment %}
+
+        <div class="footer-copyright">
+            &copy; 2024 Assanj. All rights reserved.
+        </div>
+    </div>
+</footer>
+<link rel="stylesheet" href="{% static 'css2/styler.css' %}">
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" ></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" ></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" ></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    document.getElementById("pay-now").addEventListener("click", function () {
+        fetch("{% url 'checkout_cart' %}")
+            .then(res => res.json())
+            .then(data => {
+                const options = {
+                    "key": data.key,
+                    "amount": data.amount,
+                    "currency": data.currency,
+                    "order_id": data.razorpay_order_id,
+                    "handler": function (response) {
+                        fetch("{% url 'payment_success' %}", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/x-www-form-urlencoded",
+                                'X-CSRFToken': '{{ csrf_token }}'
+                            },
+                            body: new URLSearchParams({
+                                razorpay_payment_id: response.razorpay_payment_id
+                            })
+                        }).then(res => res.json())
+                        .then(data => {
+                            alert("✅ Payment successful. Order ID: " + data.order_id);
+                            location.reload();  // or window.location.href = '/orders/';
+                        });
+                    }
+                };
+                const rzp1 = new Razorpay(options);
+                rzp1.open();
+            });
+    });
+</script>
+<script>
+document.querySelectorAll('.quantity-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+        const row = this.closest('tr');
+        const itemId = row.dataset.itemId;
+        const action = this.dataset.action;
+
+        fetch("{% url 'update_cart_quantity' %}", {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `item_id=${itemId}&action=${action}`
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.removed) {
+                row.remove();
+            } else {
+                row.querySelector('.quantity').textContent = data.quantity;
+                row.querySelector('.item-total').textContent = data.item_total.toFixed(2);
+            }
+            document.getElementById('cart-total').textContent = data.cart_total.toFixed(2);
+        });
+    });
+});
+</script>
+
+<script>
+document.querySelectorAll('.flame-card').forEach(card => {
+    const itemId = card.dataset.itemId;
+    const quantityDisplay = card.querySelector('.quantity');
+    const addRemoveBtn = card.querySelector('.add-remove-btn');
+
+    const updateCart = (action) => {
+        fetch("{% url 'toggle_cart_item' %}", {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `item_id=${itemId}&action=${action}`
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.removed) {
+                quantityDisplay.textContent = "0";
+                addRemoveBtn.textContent = "Add to Cart";
+            } else {
+                quantityDisplay.textContent = data.quantity;
+                addRemoveBtn.textContent = "Remove from Cart";
+            }
+        });
+    };
+
+    card.querySelectorAll('.quantity-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const action = btn.dataset.action === 'increment' ? 'add' : 'remove';
+            updateCart(action);
+        });
+    });
+
+    addRemoveBtn.addEventListener('click', () => {
+        const currentQuantity = parseInt(quantityDisplay.textContent);
+        const action = currentQuantity > 0 ? 'remove' : 'add';
+        updateCart(action);
+    });
+});
+
+
+fetch('/payment/success/', {
+    method: 'POST',
+    body: formData,
+    headers: {
+        'X-CSRFToken': csrftoken
+    }
+})
+.then(response => response.json())
+.then(data => {
+    if (data.success) {
+        window.location.href = data.redirect_url;  // 🔁 Redirect to receipt
+    } else {
+        alert("Payment failed: " + data.error);
+    }
+});
+
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+{% block script %}
+{% endblock script %}
+</body>
+</html>

@@ -1,0 +1,148 @@
+/* admin_custom.css */
+
+/* Dark background for the entire admin panel */
+body, .module, .dashboard-content {
+    background-color: #121212; /* Dark background */
+    color: #E0E0E0; /* Light text for contrast */
+}
+
+/* Header */
+#header {
+    background-color: #1A1A1A; /* Dark header background */
+    color: #F5F5F5; /* Light text in header */
+}
+
+#header h1, .module h2 {
+    color: #F5F5F5; /* Make headings bright */
+}
+
+/* Sidebar Menu */
+#sidebar {
+    background-color: #181818; /* Dark sidebar */
+    color: #B0B0B0; /* Lighter text in sidebar */
+}
+
+#sidebar a {
+    color: #B0B0B0; /* Links are light gray */
+}
+
+#sidebar a:hover {
+    color: #FF6347; /* Hover effect with a pop of color */
+}
+
+/* Sidebar Icons */
+#sidebar .menu li a i {
+    color: #B0B0B0; /* Light color for icons */
+}
+
+#sidebar .menu li a:hover i {
+    color: #FF6347; /* On hover, icon color changes */
+}
+
+/* Buttons and Inputs */
+button, input[type="submit"], .btn, .addlink {
+    background-color: #333; /* Dark buttons */
+    color: #F5F5F5; /* Light text on buttons */
+    border: 1px solid #555; /* Slight border */
+}
+
+button:hover, input[type="submit"]:hover, .btn:hover, .addlink:hover {
+    background-color: #444; /* Hover effect for buttons */
+    border-color: #FF6347; /* Orange border on hover */
+}
+
+/* Links */
+a {
+    color: #FF6347; /* Light orange for links */
+}
+
+a:hover {
+    color: #FF4500; /* Darker orange on hover */
+}
+
+/* Input fields */
+input, textarea, select {
+    background-color: #222; /* Dark background for inputs */
+    color: #E0E0E0; /* Light text */
+    border: 1px solid #555; /* Border color */
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: #FF6347; /* Orange focus border */
+    outline: none;
+}
+
+/* Tables */
+table {
+    background-color: #1A1A1A; /* Dark background for tables */
+    color: #E0E0E0; /* Light text color for tables */
+}
+
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #555; /* Light border */
+}
+
+/* Hover effect on table rows */
+tr:hover {
+    background-color: #333; /* Slightly lighter dark background */
+}
+
+/* Flame Card Styles (Your Custom Style) */
+.flame-card {
+    background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 0 25px rgba(255, 69, 0, 0.4);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.flame-cards {
+    background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 0 25px rgba(255, 69, 0, 0.4);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.flame-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(255, 69, 0, 0.7);
+}
+
+.flame-card-img {
+    height: 180px;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.8);
+}
+
+.flame-card-content {
+    padding: 1.2rem;
+}
+
+/* Admin Form */
+.form-row {
+    background-color: #181818; /* Dark background for form rows */
+    color: #E0E0E0; /* Light text in form */
+    border-radius: 8px; /* Rounded corners */
+}
+
+/* Datepicker (if you're using one) */
+.ui-datepicker {
+    background-color: #2c2c2c;
+    border: 1px solid #555;
+    color: #E0E0E0;
+}
+
+/* Success and Error Messages */
+.success, .error {
+    background-color: #444; /* Dark background for success/error messages */
+    color: #fff;
+}
+
+/* Django Jet Dashboards */
+.dashboard-content {
+    background-color: #121212; /* Dark background for the dashboard */
+    color: #E0E0E0; /* Light text for contrast */
+}

@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+{% if show_checkout %}
+<div class="container mt-5">
+    <h2 class="text-white mb-4">🛒 Your Cart</h2><div class="text-center mt-4">
+        <button class="btn btn-outline-danger" id="clear-cart-btn">🗑️ Clear Entire Cart</button>
+    </div>
+    
+    <div class="table-responsive">
+        <table class="table table-dark table-hover" style="background-color: #1a1a1a;">
+            <thead style="background-color: #ff5722;">
+                <tr>
+                    <th>Item Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Price (₹)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr style="background-color: #2b2b2b;" data-item-id="{{ item.menu_item.id }}">
+                    <td>
+                        {{ item.menu_item.name }}<br>
+                    </td>
+                    <td>{{ item.menu_item.price }}</td>
+                    
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <button class="btn btn-sm btn-outline-light me-2 quantity-btn" data-action="decrement">−</button>
+                            <span class="quantity">{{ item.quantity }}</span>
+                            <button class="btn btn-sm btn-outline-light ms-2 quantity-btn" data-action="increment">+</button>
+                        </div>
+                    </td>
+                    <td>₹<span class="item-total">{{ item.total_price|floatformat:2 }}</span></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center text-muted">Your cart is empty.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="d-flex justify-content-between text-white mt-4 px-2">
+        <h4>Total Price:</h4>
+        <h4>₹<span id="cart-total">{{ total_price|floatformat:2 }}</span></h4>
+    </div>
+    
+    <div class="text-center mt-4">
+        <button id="pay-now" class="btn btn-danger px-5 py-2 rounded-pill shadow-lg">
+            🔥 Pay Now
+        </button>
+    </div>
+    {% else %}
+    <br><br><br><br><br><br>
+    <img src="{% static 'images/cart.jpg' %}" alt="Empty cart!" class="img-fluid mx-auto d-block" style="max-width: 300px;">
+    <div class="text-center mt-4">
+        <a href="/" class="btn btn-danger px-5 py-2 rounded-pill shadow-lg">
+            🔥 Start Feasting
+        </a>
+    </div>
+    <div class="text-center mt-4">
+        <a href="{% url "my_orders" %}" class="btn btn-danger px-5 py-2 rounded-pill shadow-lg">
+           My Orders
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+
+    document.getElementById('clear-cart-btn').addEventListener('click', () => {
+    if (!confirm("Are you sure you want to remove all items from your cart?")) return;
+
+    fetch("{% url 'clear_cart' %}", {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+        },
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();  // Refresh the page to reflect the empty cart
+        } else {
+            alert("Something went wrong clearing the cart.");
+        }
+    });
+});
+</script>
+
+<script>
+document.querySelectorAll('.remove-from-cart').forEach(button => {
+    button.addEventListener('click', () => {
+        const itemId = button.dataset.itemId;
+
+        fetch("{% url 'toggle_cart_item' %}", {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `item_id=${itemId}&action=remove`
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.removed) {
+                // Optionally remove the row or refresh the page
+                location.reload();
+            }
+        });
+    });
+});
+</script>
+
+{% endblock %}

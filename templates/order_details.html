@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load math_filters %}
+{% block body-class %}
+all
+{% endblock body-class %}
+{% block content %}
+<br><br><br>
+<br><br><br>
+
+<div class="receipt-container">
+    <div class="receipt-header">
+        <h2>🧾 Order Receipt</h2>
+        <p><b><strong>Order:</strong> #{{ order.order_number }}</b></p>
+        <p><strong>Placed At:</strong> {{ order.created_at }}</p>
+        <p>
+            <strong>Status:</strong>
+            <span class="status-icon">
+                {% if order.status == 'in_process' %} ⏳ In Process
+                {% elif order.status == 'on_way' %} 🚚 On the way
+                {% elif order.status == 'done' %} ✅ Prepared
+                {% elif order.status == 'cancelled' %}
+                    ❌ Cancelled <br>
+                    <small>(Refund will be processed within 5-7 business days, with a small deduction of Razorpay fee. Help us create our own platform to remove this charge 🥺!)</small><br>
+                    <a href="https://razorpay.me/@sujalsuryawanshi" class="btn btn-outline-warning mt-2" target="_blank">Donate 😇</a>
+                {% endif %}
+            </span>
+        </p>
+    </div>
+
+    {% if cart_items %}
+    <table class="table receipt-table">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Price (₹)</th>
+                <th>Qty</th>
+                <th>Total (₹)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+                {% if item.quantity > 0 %}
+                    <tr>
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.price|div:item.quantity }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.price }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    <hr>
+    <p class="text-end fw-bold fs-5">Grand Total: ₹{{ order_total }}</p>
+    {% else %}
+    <p>No items found for this order.</p>
+    {% endif %}
+
+    <div class="quote-box" id="quoteBox"></div>
+</div>
+
+<br><br>
+
+<script>
+    const quotes = [
+        "Your order is being prepared… unlike your life decisions😮‍💨.",
+        "They said good things take time. Your food took that personally 🤷‍♂️.",
+        "Relax, it’s cooking. Not a Marvel movie plot twist 🕶.",
+        "If waiting burned calories, you'd be fit by now 🤦‍♂️.",
+        "Your food’s not late. It’s just making a dramatic entrance 😎.",
+        "We promise, no chefs were harmed (emotionally) while making your food 😤.",
+        "Your order is spicier than your ex's DMs 🥵.",
+        "Your food is in the oven, not a time machine. Chill out! ⏳.",
+        "Cooking time: longer than your last relationship 💔.",
+        "Your food is being prepared with love... and a bit of chaos 😅.",
+        "Your order is like a fine wine: it takes time to mature 🍷.",
+        "Your food is being cooked with the precision of a surgeon... or a toddler with a crayon 🎨.",
+        "Cooking speed: somewhere between a sloth and government paperwork 🙄.",
+        "Waiting builds character. And hunger. Mostly hunger 🤔🤷‍♂️.",
+        "We’re not slow. We’re just… flavor marinating enthusiasts 😤😤.",
+        "This food is being slow-cooked. Like my will to do cardio 😅.",
+        "Hang tight! Your taste buds are about to be promoted 😜.",
+        "Your meal is being handcrafted like a precious piece of art 😇.",
+        "Warning: Mouth-watering levels approaching critical 😉."
+    ];
+
+    document.getElementById('quoteBox').innerText = "🍴 " + quotes[Math.floor(Math.random() * quotes.length)];
+</script>
+
+<script>
+    setInterval(() => {
+        window.location.reload();
+    }, 5000);
+</script>
+
+{% endblock %}

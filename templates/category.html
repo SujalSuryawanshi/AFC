@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+
+<div class="flame-grid mt-5">
+    {% for item in items %}
+    <div class="flame-card" data-item-id="{{ item.id }}">
+        <div class="flame-card-img" style="background-image: url('{{ item.image.url }}');"></div>
+        <div class="flame-card-content">
+            <h4 class="text-white">{{ item.name }}</h4>
+            <p class="text-light">{{ item.description|truncatechars:100 }}</p>
+            <p class="text-light">₹{{ item.price }}</p>
+            <div class="d-flex align-items-center">
+                <button class="btn btn-sm btn-outline-light me-2 quantity-btn" data-action="decrement">−</button>
+                <span class="quantity">{{ item.quantity }}</span>
+                <button class="btn btn-sm btn-outline-light ms-2 quantity-btn" data-action="increment">+</button>
+            </div>
+            <button class="btn btn-danger mt-3 w-100 add-remove-btn" data-action="add">Add to Cart</button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<a href="{% url 'view_cart' %}" class="view-cart-button">
+    🛒 View Cart
+</a>
+<script>
+document.querySelectorAll('.flame-card').forEach(card => {
+    const itemId = card.dataset.itemId;
+    const quantityDisplay = card.querySelector('.quantity');
+    const addRemoveBtn = card.querySelector('.add-remove-btn');
+
+    const updateCart = (action) => {
+        fetch("{% url 'toggle_cart_item' %}", {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `item_id=${itemId}&action=${action}`
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                const quantity = data.quantity;
+                quantityDisplay.textContent = quantity;
+                if (quantity > 0) {
+                    addRemoveBtn.textContent = "Remove from Cart";
+                    addRemoveBtn.dataset.action = "remove";
+                } else {
+                    addRemoveBtn.textContent = "Add to Cart";
+                    addRemoveBtn.dataset.action = "add";
+                }
+            } else {
+                alert(data.error || "Something went wrong.");
+            }
+        });
+    };
+
+    // Quantity +/-
+    card.querySelectorAll('.quantity-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const action = btn.dataset.action;
+            updateCart(action);
+        });
+    });
+
+    // Add to Cart / Remove from Cart
+    addRemoveBtn.addEventListener('click', () => {
+        const action = addRemoveBtn.dataset.action;
+        updateCart(action);
+    });
+});
+</script>
+{% endblock %}

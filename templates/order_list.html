@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="flame-grid mt-5">
+    {% for order in order %}
+        <div class="flame-card" data-item-id="{{ order.id }}">
+            <div class="flame-card-content">
+                <h4 class="text-white">{{ order.order_number }}</h4>
+                {% for item in order.items.all %}
+                    <div>{{ item.product.name }} × {{ item.quantity }}</div>
+                {% endfor %}
+                <button class='btn btn-outline-success' onclick="updateOrderStatus({{ order.id }}, 'done')">Done</button>
+                <button class='btn btn-outline-warning' onclick="cancelOrder({{ order.id }})">Cancel</button>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<script>
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.startsWith(name + "=")) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function updateOrderStatus(orderId, newStatus) {
+    fetch(`/update-order-status/${orderId}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: `status=${newStatus}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert(`Order status updated to: ${data.new_status}`);
+            location.reload();
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        alert('Unexpected error: ' + error);
+    });
+}
+
+function cancelOrder(orderId) {
+    if (confirm("Are you sure you want to cancel this order?")) {
+        fetch("/cancel-order/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCookie('csrftoken')
+            },
+            body: JSON.stringify({ order_id: orderId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                alert("Order cancelled and refunded.");
+                location.reload();
+            } else {
+                alert("Failed to cancel: " + data.message);
+            }
+        })
+        .catch(error => {
+            alert("Unexpected error: " + error);
+        });
+    }
+}
+</script>
+{% endblock %}

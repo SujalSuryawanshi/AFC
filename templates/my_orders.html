@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}My Orders{% endblock %}
+{% block body-class %}bg-dark text-white{% endblock %}
+{% block content %}
+
+<div class="container py-5">
+    
+    {% if orders %}
+    <h2 class="mb-4 text-center">🧾 Your Orders</h2>
+    <div class="list-group">
+        {% for order in orders %}
+        <a href="{% url 'order_receipt' order.id %}" class="list-group-item list-group-item-action bg-dark text-white mb-2 rounded">
+            <div class="d-flex justify-content-between">
+                <div><strong>#</strong> {{ order.order_number }}</div>
+                <div><strong></strong> {{ order.created_at|date:"M d, Y H:i" }}</div>
+                <div><strong></strong> ₹{{ order.total_amount }}</div>
+                <div>
+                    {% if order.status == 'in_process' %} ⏳ In Process
+                {% elif order.status == 'on_way' %} 🚚 On the way
+                {% elif order.status == 'done' %} ✅ Prepared
+                {% elif order.status == 'cancelled' %}
+                    ❌ Cancelled
+                {% endif %}
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+        <br><br><br><br>
+    <img src="{% static 'images/cart.jpg' %}" alt="Empty cart!" class="img-fluid mx-auto d-block" style="max-width: 300px;">
+    <div class="text-center mt-4">
+        <a href="/" class="btn btn-danger px-5 py-2 rounded-pill shadow-lg">
+            🔥 Start Ordering
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

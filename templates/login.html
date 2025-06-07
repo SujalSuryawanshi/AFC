@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block body-class %}
+all
+{% endblock body-class %}
+
+{% block content %}
+<br>
+<br>
+<br>
+<br>
+{% if user.is_authenticated %}
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+  <div class="card shadow p-4" style="max-width: 450px; width: 100%;">
+    <div class="text-center mb-4">
+      <h2 class="fw-bold">Welcome Back🤨!?</h2>
+      <h3 class="fw-bold">Want to log in again!?😱</h3>
+    </div>
+  </div>
+</div>
+{% else %}
+
+    <div class="text-center mb-4">
+      <h2 class="fw-bold">Welcome Back!</h2>
+      <p class="text-muted">Log in to your account</p>
+    </div>
+    
+    <form method="post">
+      {% csrf_token %}
+      {{ form|crispy }}
+      
+      <div class="d-grid gap-2 mt-3 text-center">
+        <button type="submit" class="btn btn-outline-primary" style="background-color: transparent; color: #0d6efd; border-color: #0d6efd;">Log In</button>
+        <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-outline-danger">
+            <i class="fab fa-google"></i> Login with Google
+        </a>
+        <br>
+        <br>
+   </div>
+    </form>
+    
+    <div class="mt-4 text-center">
+
+      <p>
+        Don't have an account?
+        <a href="{% url 'register' %}" class="text-decoration-none">Register here</a>
+      </p>
+    </div>
+
+{% endif %}
+{% endblock content %}
